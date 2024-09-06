@@ -1,0 +1,30 @@
+name: Build against nightly
+
+on:
+  push:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  nightly:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.4
+      - name: Clone
+        run: |
+          git clone git@github.com:open-telemetry/opentelemetry-php-instrumentation.git
+          cd opentelemetry-php-instrumentation/ext
+          ls
+          php -v
+      - name: Build
+        run: |
+          phpize
+          ./configure
+          make
+      - name: Test
+        env:
+          TEST_PHP_ARGS: "-q" #do not try to submit failures
+        run: make test TESTS=--show-diff
