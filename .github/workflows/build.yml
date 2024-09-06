@@ -21,6 +21,7 @@ jobs:
           php -v
       - name: Build
         run: |
+          pwd
           phpize
           ./configure
           make
