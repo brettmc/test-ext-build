@@ -19,13 +19,12 @@ jobs:
           cd opentelemetry-php-instrumentation/ext
           ls
           php -v
-      - name: Build
+      - name: Build and test
+        env:
+          TEST_PHP_ARGS: "-q"
         run: |
-          pwd
+          cd opentelemetry-php-instrumentation/ext
           phpize
           ./configure
           make
-      - name: Test
-        env:
-          TEST_PHP_ARGS: "-q" #do not try to submit failures
-        run: make test TESTS=--show-diff
+          make test TESTS=--show-diff
